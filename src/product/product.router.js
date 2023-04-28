@@ -2,15 +2,17 @@ import { Router } from 'express';
 import {
   createProduct,
   deleteProduct,
-  readProduct,
+  readProductById,
+  readProductByRC,
   updateProduct,
 } from './product.controller';
 
 const productRouter = Router();
 
 productRouter.post('/', createProduct);
-productRouter.get('/', readProduct);
-productRouter.patch('/', updateProduct);
-productRouter.delete('/', deleteProduct);
+productRouter.get('/', readProductByRC);
+productRouter.get('/:id', readProductById);
+productRouter.patch('/:id', updateProduct);
+productRouter.delete('/:id', deleteProduct);
 
 export default productRouter;

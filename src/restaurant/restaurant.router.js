@@ -2,15 +2,17 @@ import { Router } from 'express';
 import {
   createRestaurant,
   deleteRestaurant,
-  readRestaurant,
+  readRestaurantById,
+  readRestaurantByCN,
   updateRestaurant,
 } from './restaurant.controller';
 
 const restaurantRouter = Router();
 
 restaurantRouter.post('/', createRestaurant);
-restaurantRouter.get('/', readRestaurant);
-restaurantRouter.patch('/', updateRestaurant);
-restaurantRouter.delete('/', deleteRestaurant);
+restaurantRouter.get('/', readRestaurantByCN);
+restaurantRouter.get('/:id', readRestaurantById);
+restaurantRouter.patch('/:id', updateRestaurant);
+restaurantRouter.delete('/:id', deleteRestaurant);
 
 export default restaurantRouter;

@@ -10,8 +10,8 @@ import {
 const userRouter = Router();
 
 userRouter.post('/', createUser);
-userRouter.get('/:id', readUserById);
 userRouter.get('/:email/:password', readUserByMP);
+userRouter.get('/:id', readUserById);
 userRouter.patch('/:id', updateUser);
 userRouter.delete('/:id', deleteUser);
 
