@@ -34,7 +34,7 @@ export async function readRestaurantById(req, res) {
   try {
     const id = req.params.id;
     const result = await restaurantModel.findOne({ _id: id, active: true });
-    res.status(200).json(result);
+    result ? res.status(200).json(result) : res.sendStatus(404);
   } catch (err) {
     res.status(400).json(err.message);
   }

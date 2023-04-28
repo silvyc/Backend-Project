@@ -14,12 +14,8 @@ export async function createOrder(req, res) {
 export async function readOrderId(req, res) {
   try {
     const id = req.params.id;
-    const result = await orderModel.findOne({ _id: id, active: true });
-    if (result.active != false) {
-      res.status(200).json(result);
-    } else {
-      res.status(404).json('Result not found or disabled');
-    }
+    const result = await orderModel.findByOne({ _id: id, active: true });
+    result ? res.status(200).json(result) : res.sendStatus(404);
   } catch (err) {
     res.status(400).json(err.message);
   }
@@ -51,7 +47,7 @@ export async function updateOrder(req, res) {
 export async function deleteOrder(req, res) {
   try {
     const id = req.params.id;
-    const result = await orderModel.findOneAndUpdate({
+    const result = await orderModel.findByOneAndUpdate({
       _id: id,
       active: false,
     });

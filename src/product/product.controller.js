@@ -33,11 +33,7 @@ export async function readProductById(req, res) {
   try {
     const id = req.params.id;
     const result = await productModel.findOne({ _id: id, active: true });
-    if (result.active != false) {
-      res.status(200).json(result);
-    } else {
-      res.status(404).json('Result not found or disabled');
-    }
+    result ? res.status(200).json(result) : res.sendStatus(404);
   } catch (err) {
     res.status(400).json(err.message);
   }
