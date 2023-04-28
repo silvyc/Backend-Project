@@ -3,8 +3,8 @@ import { Schema, model } from 'mongoose';
 const orderSchema = new Schema(
   {
     orderStatus: { type: String, required: true },
-    products: {},
-    active: { type: Boolean },
+    restaurant: { type: String, required: true },
+    active: { type: Boolean, default: true },
   },
   { timestamps: true }
 );

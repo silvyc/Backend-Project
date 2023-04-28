@@ -13,7 +13,7 @@ const orderRouter = Router();
 orderRouter.post('/', createOrder);
 orderRouter.get('/:id', readOrderId);
 //orderRouter.get('/', readOrderRestaurant);
-orderRouter.patch('/', updateOrder);
-orderRouter.delete('/', deleteOrder);
+orderRouter.patch('/:id', updateOrder);
+orderRouter.delete('/:id', deleteOrder);
 
 export default orderRouter;
