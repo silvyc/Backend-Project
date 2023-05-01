@@ -2,9 +2,9 @@ import { Router } from 'express';
 import {
   createOrder,
   deleteOrder,
-  readOrder,
+  readOrders,
   readOrderId,
-  readOrderRestaurant,
+  readOrderSend,
   updateOrder,
 } from './order.controller';
 
@@ -12,7 +12,8 @@ const orderRouter = Router();
 
 orderRouter.post('/', createOrder);
 orderRouter.get('/:id', readOrderId);
-//orderRouter.get('/', readOrderRestaurant);
+orderRouter.get('/', readOrders);
+orderRouter.get('/send', readOrderSend);
 orderRouter.patch('/:id', updateOrder);
 orderRouter.delete('/:id', deleteOrder);
 

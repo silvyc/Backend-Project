@@ -13,17 +13,23 @@ export async function createRestaurant(req, res) {
 
 export async function readRestaurantByCN(req, res) {
   try {
-    const category = req.query.category;
-    const name = req.query.name;
-    const query = { active: true };
+    const { name, categories } = req.query;
 
-    if (category) {
-      query.category = category;
-    }
-    if (name) {
-      query.name = name;
-    }
-    const result = await restaurantModel.find(query);
+    const filter = {
+      ...(name && { name: { $regex: name, $options: 'i' } }),
+      ...(category && { categories: { $in: categories.split(',') } }),
+      active: true,
+    };
+
+    //Un-optimized
+    // if (category) {
+    //   query.category = category;
+    // }
+    // if (name) {
+    //   query.name = name;
+    // }
+
+    const result = await restaurantModel.find(filter);
     result.length > 0 ? res.status(200).json(result) : res.sendStatus(404);
   } catch (err) {
     res.status(400).json(err.message);

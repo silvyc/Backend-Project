@@ -3,7 +3,9 @@ import { Schema, model } from 'mongoose';
 const orderSchema = new Schema(
   {
     orderStatus: { type: String, required: true },
-    restaurant: { type: String, required: true },
+    //restaurant_id will help us as a secondary key to connect orders with restaurant
+    restaurant_id: { type: Schema.Types.ObjectId, required: true },
+    user_id: { type: Schema.Types.ObjectId, required: true },
     active: { type: Boolean, default: true },
   },
   { timestamps: true }

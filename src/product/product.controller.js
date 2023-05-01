@@ -12,17 +12,23 @@ export async function createProduct(req, res) {
 }
 export async function readProductByRC(req, res) {
   try {
-    const category = req.query.category;
-    const restaurant = req.query.restaurant;
-    const query = { active: true };
+    const { restaurant_id, category } = req.queryy;
 
-    if (category) {
-      query.category = category;
-    }
-    if (restaurant) {
-      query.restaurant = restaurant;
-    }
-    const result = await productModel.find(query);
+    const filter = {
+      ...(restaurant_id && { restaurant_id: restaurant_id }),
+      ...(category && { category: category }),
+      active: true,
+    };
+
+    // Un-OPTIMIZE
+    // if (category) {
+    //   query.category = category;
+    // }
+    // if (restaurant) {
+    //   query.restaurant = restaurant;
+    // }
+
+    const result = await productModel.find(filter);
     result ? res.status(200).json(result) : res.sendStatus(404);
   } catch (err) {
     res.status(400).json(err.message);

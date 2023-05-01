@@ -21,11 +21,43 @@ export async function readOrderId(req, res) {
   }
 }
 
+export async function readOrders(req, res) {
+  try {
+    const { user_id, restaurant_id, date1, date2 } = req.query;
+    const filter = {
+      ...(user_id && { user_id: user_id }),
+      ...(restaurant_id && { restaurant_id: restaurant_id }),
+      ...(date1 &&
+        date2 && {
+          createdAt: { $gte: new Date(date1), $lt: new Date(date2) },
+        }),
+      active: true,
+    };
+
+    const result = await orderModel.find(filter);
+    result ? res.status(200).json(result) : res.sendStatus(404);
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+}
+
+export async function readOrderSend(res) {
+  try {
+    const result = await orderModel.find({
+      ...{ orderStatus: 'Enviado' },
+      active: true,
+    });
+    result ? res.status(200).json(result) : res.sendStatus(404);
+  } catch (err) {
+    res.status(400).json(err.message);
+  }
+}
+
 export async function updateOrder(req, res) {
   try {
     const id = req.params.id;
     const result = await orderModel.findById(id);
-    if (result.orderStatus != 'Delivered') {
+    if (result.orderStatus == 'Creado') {
       result = await orderModel.findOneAndUpdate(
         { _id: id, active: true },
         req.body,
@@ -37,7 +69,9 @@ export async function updateOrder(req, res) {
         ? res.status(200).json('Changes made to the order with id ' + id)
         : res.sendStatus(404);
     } else {
-      res.status(401).json('Order was already Delivered');
+      res
+        .status(401)
+        .json('Order was already Send/Delivered cant make any changes');
     }
   } catch (err) {
     res.status(400).json(err.message);
