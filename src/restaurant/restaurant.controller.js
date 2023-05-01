@@ -15,12 +15,6 @@ export async function readRestaurantByCN(req, res) {
   try {
     const { name, categories } = req.query;
 
-    const filter = {
-      ...(name && { name: { $regex: name, $options: 'i' } }),
-      ...(category && { categories: { $in: categories.split(',') } }),
-      active: true,
-    };
-
     //Un-optimized
     // if (category) {
     //   query.category = category;
@@ -29,7 +23,11 @@ export async function readRestaurantByCN(req, res) {
     //   query.name = name;
     // }
 
-    const result = await restaurantModel.find(filter);
+    const result = await restaurantModel.find({
+      ...(name && { name: { $regex: name, $options: 'i' } }),
+      ...(category && { categories: { $in: categories.split(',') } }),
+      active: true,
+    });
     result.length > 0 ? res.status(200).json(result) : res.sendStatus(404);
   } catch (err) {
     res.status(400).json(err.message);

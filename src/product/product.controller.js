@@ -14,12 +14,6 @@ export async function readProductByRC(req, res) {
   try {
     const { restaurant_id, category } = req.queryy;
 
-    const filter = {
-      ...(restaurant_id && { restaurant_id: restaurant_id }),
-      ...(category && { category: category }),
-      active: true,
-    };
-
     // Un-OPTIMIZE
     // if (category) {
     //   query.category = category;
@@ -28,7 +22,11 @@ export async function readProductByRC(req, res) {
     //   query.restaurant = restaurant;
     // }
 
-    const result = await productModel.find(filter);
+    const result = await productModel.find({
+      ...(restaurant_id && { restaurant_id: restaurant_id }),
+      ...(category && { category: category }),
+      active: true,
+    });
     result ? res.status(200).json(result) : res.sendStatus(404);
   } catch (err) {
     res.status(400).json(err.message);

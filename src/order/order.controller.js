@@ -14,7 +14,7 @@ export async function createOrder(req, res) {
 export async function readOrderId(req, res) {
   try {
     const id = req.params.id;
-    const result = await orderModel.findByOne({ _id: id, active: true });
+    const result = await orderModel.findOne({ _id: id, active: true });
     result ? res.status(200).json(result) : res.sendStatus(404);
   } catch (err) {
     res.status(400).json(err.message);
@@ -24,7 +24,8 @@ export async function readOrderId(req, res) {
 export async function readOrders(req, res) {
   try {
     const { user_id, restaurant_id, date1, date2 } = req.query;
-    const filter = {
+
+    const result = await orderModel.find({
       ...(user_id && { user_id: user_id }),
       ...(restaurant_id && { restaurant_id: restaurant_id }),
       ...(date1 &&
@@ -32,9 +33,7 @@ export async function readOrders(req, res) {
           createdAt: { $gte: new Date(date1), $lt: new Date(date2) },
         }),
       active: true,
-    };
-
-    const result = await orderModel.find(filter);
+    });
     result ? res.status(200).json(result) : res.sendStatus(404);
   } catch (err) {
     res.status(400).json(err.message);
